@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using VolunteerManagementSystem.Data;
 
 
+//test by miles fernandez
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
