@@ -4,16 +4,21 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using VolunteerManagementSystem.Data;
 
+//test by miles fernandez
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//  Register HttpContextAccessor & memory cache (for Session)
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
-
-// ✅ Enable Session
+// Enable Session
 builder.Services.AddSession(options =>
 {
     options.Cookie.HttpOnly = true;
@@ -26,7 +31,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -35,9 +39,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Add Session middleware BEFORE endpoints
+// Session must be before endpoints
 app.UseSession();
 
+// Only use these if you actually configured auth services
+// app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
