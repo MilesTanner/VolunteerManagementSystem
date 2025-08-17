@@ -1,0 +1,76 @@
+﻿@model IEnumerable<VolunteerManagementSystem.Models.Opportunity>
+
+@{
+    ViewData["Title"] = "Opportunities";
+    var filter = ViewBag.Filter as string ?? "";
+    var center = ViewBag.Center as string ?? "";
+    var q = ViewBag.Query as string ?? "";
+}
+
+<h1>Opportunities</h1>
+
+<div class="mb-3">
+    <a class="btn btn-outline-secondary btn-sm" asp-controller="Home" asp-action="Index">Dashboard</a>
+    <a class="btn btn-outline-secondary btn-sm" asp-controller="Volunteers" asp-action="Index">Volunteers</a>
+</div>
+
+<form method="get" class="mb-3" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+    <label class="form-label mb-0">Filter</label>
+    <select name="filter" class="form-select" style="max-width:220px;">
+        <option value="" selected="@(filter == "")">(All)</option>
+        <option value="recent" selected="@(filter == "recent")">Most Recent (60 days)</option>
+    </select>
+
+    <input name="center"
+           value="@center"
+           class="form-control"
+           placeholder="Filter by Center"
+           style="max-width:220px;" />
+
+    <input name="q"
+           value="@q"
+           class="form-control"
+           placeholder="Search title or description"
+           style="max-width:260px;" />
+
+    <button class="btn btn-primary" type="submit">Apply</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
+</form>
+
+<p>
+    <a asp-action="Create" class="btn btn.success btn btn-success">Create New Opportunity</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Title)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Center)</th>
+            <th>@Html.DisplayNameFor(model => model.First().CreatedDate)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Center</td>
+                <td>@item.CreatedDate.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-action="Matches" asp-route-id="@item.Id">Matches</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No opportunities found. Try changing the filter or adding one.</div>
+}

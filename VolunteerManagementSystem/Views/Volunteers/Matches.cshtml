@@ -1,0 +1,30 @@
+﻿@model IEnumerable<VolunteerManagementSystem.Models.Opportunity>
+@{
+    ViewData["Title"] = "Opportunity Matches";
+    var vol = ViewBag.Volunteer as VolunteerManagementSystem.Models.Volunteer;
+}
+
+<h2>Opportunity Matches for: @vol?.FirstName @vol?.LastName</h2>
+<p><strong>Email:</strong> @vol?.Email &nbsp; | &nbsp; <strong>Status:</strong> @vol?.ApprovalStatus</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Center</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.Title</td>
+                <td>@o.Center</td>
+                <td>@o.CreatedDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p><a asp-action="Index">Back to Volunteers</a></p>

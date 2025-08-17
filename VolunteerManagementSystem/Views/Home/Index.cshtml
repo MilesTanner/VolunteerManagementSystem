@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    int volunteerCount = ViewBag.VolunteerCount ?? 0;
+    int opportunityCount = ViewBag.OpportunityCount ?? 0;
+}
+
+<div class="container py-4">
+    <h1 class="mb-4">Volunteer Management System — Admin</h1>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Volunteers</h5>
+                    <p class="card-text mb-1">Manage volunteer profiles, approvals, and availability.</p>
+                    <p class="text-muted mb-3">Total: @volunteerCount</p>
+                    <a class="btn btn-primary" asp-controller="Volunteers" asp-action="Index">Go to Volunteers</a>
+                    <a class="btn btn-outline-secondary" asp-controller="Volunteers" asp-action="Create">Add New</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Opportunities</h5>
+                    <p class="card-text mb-1">Create and manage volunteer opportunities.</p>
+                    <p class="text-muted mb-3">Total: @opportunityCount</p>
+                    <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Index">Go to Opportunities</a>
+                    <a class="btn btn-outline-secondary" asp-controller="Opportunities" asp-action="Create">Add New</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <div>
+        <a class="btn btn-outline-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
+    </div>
+</div>
