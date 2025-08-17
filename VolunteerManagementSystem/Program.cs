@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using VolunteerManagementSystem.Data;
 
 //test by miles fernandez
+//test by bryce :)
 
 var builder = WebApplication.CreateBuilder(args);
 
