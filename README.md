@@ -23,4 +23,4 @@ Built as a course project — demonstrates CRUD operations, authentication, and 
 ### Running Locally
 1. Clone this repo:
    ```bash
-   git clone https://github.com/<your-username>/VolunteerManagementSystem.git
+   git clone https://github.com/(your-username)/VolunteerManagementSystem.git
