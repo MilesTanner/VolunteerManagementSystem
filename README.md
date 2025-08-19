@@ -23,10 +23,5 @@ Empress Verdun
 ## Getting Started
 
 ### Prerequisites
-- [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download) (or version required by instructor)
+- [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download) 
 - Visual Studio 2022 / VS Code
-
-### Running Locally
-1. Clone this repo:
-   ```bash
-   git clone https://github.com/(your-username)/VolunteerManagementSystem.git
