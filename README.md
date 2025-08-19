@@ -23,5 +23,5 @@ Empress Verdun
 ## Getting Started
 
 ### Prerequisites
-- [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download) 
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download) 
 - Visual Studio 2022 / VS Code
