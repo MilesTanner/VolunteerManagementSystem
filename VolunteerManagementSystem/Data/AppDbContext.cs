@@ -8,6 +8,6 @@ namespace VolunteerManagementSystem.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Volunteer> Volunteers => Set<Volunteer>();
-        public DbSet<Opportunity> Opportunities => Set<Opportunity>(); // 👈 add this
+        public DbSet<Opportunity> Opportunities => Set<Opportunity>(); 
     }
 }

@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="mb-0">About VMS</h1>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Back to Dashboard</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="mb-2">What this is</h4>
+        <p class="text-muted mb-3">
+            The Volunteer Management System (VMS) helps admins organize volunteers, opportunities, and approvals with a clean, fast workflow.
+        </p>
+
+        <h4 class="mb-2">Why it exists</h4>
+        <p class="text-muted mb-3">
+            Built to reduce admin overhead and boost clarity, VMS focuses on the essentials: simple forms, searchable lists, and clear status tracking.
+        </p>
+
+        <h4 class="mb-2">Who built it</h4>
+        <div class="p-3 rounded-2xl" style="background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);">
+            <strong>Developed by <span class="text-decoration-underline">VEMB.Co</span></strong><br />
+            <span class="text-muted">Design, engineering, and caffeine-fueled polish.</span>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card h-100 hoverable">
+            <div class="card-body">
+                <h5 class="mb-2">Highlights</h5>
+                <ul class="mb-0 text-muted">
+                    <li>Role-gated admin access</li>
+                    <li>Volunteer approvals & status badges</li>
+                    <li>Search & filtering with pagination</li>
+                    <li>Modern, accessible UI with Bootstrap</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100 hoverable">
+            <div class="card-body">
+                <h5 class="mb-2">Tech stack</h5>
+                <ul class="mb-0 text-muted">
+                    <li>ASP.NET Core MVC + EF Core</li>
+                    <li>Bootstrap 5 + custom theme</li>
+                    <li>Razor views & TempData toasts</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

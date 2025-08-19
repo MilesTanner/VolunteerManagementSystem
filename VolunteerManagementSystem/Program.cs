@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using VolunteerManagementSystem.Data;
 
-//test by miles fernandez
-//test by bryce :)
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,7 +25,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -43,8 +40,7 @@ app.UseRouting();
 // Session must be before endpoints
 app.UseSession();
 
-// Only use these if you actually configured auth services
-// app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

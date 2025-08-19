@@ -1,71 +1,103 @@
 ﻿@model IEnumerable<VolunteerManagementSystem.Models.Volunteer>
+@using VolunteerManagementSystem.Models
 
 @{
     ViewData["Title"] = "Volunteers";
     var status = ViewBag.Status as string ?? "";
     var q = ViewBag.Query as string ?? "";
+
+    string BadgeFor(ApprovalStatus s) => s switch
+    {
+        ApprovalStatus.Approved => "badge-success",
+        ApprovalStatus.PendingApproval => "badge-warning",
+        ApprovalStatus.Disapproved => "badge-danger",
+        ApprovalStatus.Inactive => "text-bg-secondary", // fallback
+        _ => "text-bg-secondary"
+    };
 }
 
-<h1>Volunteers</h1>
-
-<div class="mb-3">
-    <a class="btn btn-outline-secondary btn-sm" asp-controller="Home" asp-action="Index">Dashboard</a>
-    <a class="btn btn-outline-secondary btn-sm" asp-controller="Opportunities" asp-action="Index">Opportunities</a>
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="mb-0">Volunteers</h1>
+    <div class="d-none d-md-flex gap-2">
+        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">Dashboard</a>
+        <a class="btn btn-outline-primary" asp-controller="Opportunities" asp-action="Index">Opportunities</a>
+    </div>
 </div>
 
-<form method="get" class="mb-3" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-    <label class="form-label mb-0">Status</label>
-    <select name="status" class="form-select" style="max-width:220px;">
-        <option value="" selected="@(status == "")">(All)</option>
-        <option value="Approved" selected="@(status == "Approved")">Approved</option>
-        <option value="PendingApproval" selected="@(status == "PendingApproval")">Pending Approval</option>
-        <option value="Disapproved" selected="@(status == "Disapproved")">Disapproved</option>
-        <option value="Inactive" selected="@(status == "Inactive")">Inactive</option>
-    </select>
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-12 col-md-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="" selected="@(status == "")">(All)</option>
+                    <option value="Approved" selected="@(status == "Approved")">Approved</option>
+                    <option value="PendingApproval" selected="@(status == "PendingApproval")">Pending Approval</option>
+                    <option value="Disapproved" selected="@(status == "Disapproved")">Disapproved</option>
+                    <option value="Inactive" selected="@(status == "Inactive")">Inactive</option>
+                </select>
+            </div>
 
-    <input name="q"
-           value="@q"
-           class="form-control"
-           placeholder="Search name or email"
-           style="max-width:260px;" />
+            <div class="col-12 col-md-4">
+                <label class="form-label">Search</label>
+                <input name="q"
+                       value="@q"
+                       class="form-control"
+                       placeholder="Search name or email" />
+            </div>
 
-    <button class="btn btn-primary" type="submit">Apply</button>
-    <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
-</form>
+            <div class="col-12 col-md-5 d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Apply</button>
+                <a class="btn btn-outline-primary" asp-action="Index">Reset</a>
+                <a asp-action="Create" class="btn btn-success ms-auto">Create New Volunteer</a>
+            </div>
+        </form>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New Volunteer</a>
-</p>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.First().FirstName)</th>
-            <th>@Html.DisplayNameFor(model => model.First().LastName)</th>
-            <th>@Html.DisplayNameFor(model => model.First().Email)</th>
-            <th>@Html.DisplayNameFor(model => model.First().ApprovalStatus)</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@item.Email</td>
-                <td>@item.ApprovalStatus</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@if (!Model.Any())
+@if (Model != null && Model.Any())
 {
-    <div class="alert alert-info">No volunteers found. Try changing the filter or add one.</div>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">First name</th>
+                            <th scope="col">Last name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.FirstName</td>
+                                <td>@item.LastName</td>
+                                <td class="text-muted">@item.Email</td>
+                                <td>
+                                    <span class="badge @BadgeFor(item.ApprovalStatus)">
+                                        @item.ApprovalStatus
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group" aria-label="Row actions">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Details</a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-primary">No volunteers found. Try adjusting filters or add one.</div>
 }

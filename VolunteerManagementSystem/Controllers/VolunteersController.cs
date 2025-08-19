@@ -34,6 +34,7 @@ namespace VolunteerManagementSystem.Controllers
             // Search by name or email
             if (!string.IsNullOrWhiteSpace(q))
             {
+                q = q.Trim();
                 query = query.Where(v =>
                     v.FirstName.Contains(q) ||
                     v.LastName.Contains(q) ||
@@ -44,6 +45,7 @@ namespace VolunteerManagementSystem.Controllers
             ViewBag.Query = q;
 
             var list = await query
+                .AsNoTracking()
                 .OrderBy(v => v.LastName)
                 .ThenBy(v => v.FirstName)
                 .ToListAsync();
@@ -54,12 +56,21 @@ namespace VolunteerManagementSystem.Controllers
         // GET: Volunteers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+            {
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var volunteer = await _context.Volunteers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (volunteer == null) return NotFound();
+            if (volunteer == null)
+            {
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(volunteer);
         }
@@ -72,22 +83,34 @@ namespace VolunteerManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,ApprovalStatus")] Volunteer volunteer)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(volunteer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = "Please fix the errors and try again.";
+                return View(volunteer);
             }
-            return View(volunteer);
+
+            _context.Add(volunteer);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Volunteer created successfully.";
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Volunteers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+            {
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var volunteer = await _context.Volunteers.FindAsync(id);
-            if (volunteer == null) return NotFound();
+            if (volunteer == null)
+            {
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(volunteer);
         }
@@ -97,34 +120,54 @@ namespace VolunteerManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,ApprovalStatus")] Volunteer volunteer)
         {
-            if (id != volunteer.Id) return NotFound();
-
-            if (ModelState.IsValid)
+            if (id != volunteer.Id)
             {
-                try
-                {
-                    _context.Update(volunteer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VolunteerExists(volunteer.Id)) return NotFound();
-                    throw;
-                }
+                TempData["Error"] = "Volunteer mismatch.";
                 return RedirectToAction(nameof(Index));
             }
-            return View(volunteer);
+
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Please fix the errors and try again.";
+                return View(volunteer);
+            }
+
+            try
+            {
+                _context.Update(volunteer);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Volunteer updated.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Volunteers.Any(e => e.Id == volunteer.Id))
+                {
+                    TempData["Error"] = "Volunteer no longer exists.";
+                    return RedirectToAction(nameof(Index));
+                }
+                throw; // let dev page show details
+            }
         }
 
         // GET: Volunteers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+            {
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var volunteer = await _context.Volunteers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (volunteer == null) return NotFound();
+            if (volunteer == null)
+            {
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(volunteer);
         }
@@ -135,11 +178,16 @@ namespace VolunteerManagementSystem.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var volunteer = await _context.Volunteers.FindAsync(id);
-            if (volunteer != null)
+            if (volunteer == null)
             {
-                _context.Volunteers.Remove(volunteer);
-                await _context.SaveChangesAsync();
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
             }
+
+            _context.Volunteers.Remove(volunteer);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Volunteer deleted.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -147,9 +195,14 @@ namespace VolunteerManagementSystem.Controllers
         public async Task<IActionResult> Matches(int id)
         {
             var volunteer = await _context.Volunteers.FindAsync(id);
-            if (volunteer == null) return NotFound();
+            if (volunteer == null)
+            {
+                TempData["Error"] = "Volunteer not found.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var opportunities = await _context.Opportunities
+                .AsNoTracking()
                 .OrderByDescending(o => o.CreatedDate)
                 .Take(10)
                 .ToListAsync();
@@ -157,8 +210,5 @@ namespace VolunteerManagementSystem.Controllers
             ViewBag.Volunteer = volunteer;
             return View(opportunities);
         }
-
-        private bool VolunteerExists(int id) =>
-            _context.Volunteers.Any(e => e.Id == id);
     }
 }

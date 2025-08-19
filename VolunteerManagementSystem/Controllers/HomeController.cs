@@ -4,10 +4,10 @@ using VolunteerManagementSystem.Models;
 using VolunteerManagementSystem.Filters;
 using VolunteerManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VolunteerManagementSystem.Controllers
 {
-    [AdminOnly] // ensures Home is locked behind login
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,6 +19,7 @@ namespace VolunteerManagementSystem.Controllers
             _context = context;
         }
 
+        [AdminOnly]  // protected
         public async Task<IActionResult> Index()
         {
             ViewBag.VolunteerCount = await _context.Volunteers.CountAsync();
@@ -26,15 +27,18 @@ namespace VolunteerManagementSystem.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [AdminOnly]  // protected
+        public IActionResult Privacy() => View();
+
+        [AllowAnonymous]  // public
+        public IActionResult About()
         {
+            ViewData["Title"] = "About Us";
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() =>
+            View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

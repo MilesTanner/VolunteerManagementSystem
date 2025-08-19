@@ -24,10 +24,10 @@ namespace VolunteerManagementSystem.Controllers
             {
                 HttpContext.Session.SetString("Admin", "true");
                 if (!string.IsNullOrWhiteSpace(returnUrl)) return Redirect(returnUrl);
-                return RedirectToAction("Index", "Home"); // change to Volunteers later if you want
+                return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Error = "Invalid credentials";
+            ViewBag.Error = "Incorrect username or password. Please check your spelling and try again.";
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }

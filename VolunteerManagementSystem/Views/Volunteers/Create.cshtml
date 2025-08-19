@@ -1,52 +1,57 @@
 ﻿@model VolunteerManagementSystem.Models.Volunteer
-
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Volunteer";
 }
 
-<h1>Create</h1>
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="mb-0">Create Volunteer</h1>
+    <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+</div>
 
-<h4>Volunteer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Create" method="post" class="row g-3">
+            @Html.AntiForgeryToken()
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
+
+            <div class="col-md-6">
+                <label asp-for="FirstName" class="form-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
+
+            <div class="col-md-6">
+                <label asp-for="LastName" class="form-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ApprovalStatus" class="control-label"></label>
+
+            <div class="col-md-6">
+                <label asp-for="ApprovalStatus" class="form-label"></label>
                 <select asp-for="ApprovalStatus"
-                        class="form-control"
+                        class="form-select"
                         asp-items="Html.GetEnumSelectList<VolunteerManagementSystem.Models.ApprovalStatus>()">
                 </select>
                 <span asp-validation-for="ApprovalStatus" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="col-12 d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-action="Index" class="btn btn-outline-primary">Cancel</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
