@@ -3,6 +3,12 @@
 An ASP.NET Core MVC application for managing volunteers and opportunities.  
 Built as a course project — demonstrates CRUD operations, authentication, and admin-only access.
 
+Co developed by:
+Miles Fernandez
+Victoria Torres
+Bryce Gordon &
+Empress Verdun
+
 ---
 
 ## Features
