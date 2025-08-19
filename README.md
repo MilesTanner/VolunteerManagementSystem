@@ -11,6 +11,10 @@ Empress Verdun
 
 ---
 
+TO LOGIN:
+User: admin
+Password: pass123
+
 ## Features
 - **Volunteer Management**: Create, edit, approve, and remove volunteers.
 - **Opportunity Management**: Track and list volunteering opportunities.
